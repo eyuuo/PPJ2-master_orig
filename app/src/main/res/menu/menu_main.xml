@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.diaryoneline.MainActivity">
+
+
+
+    <item
+        android:id="@+id/action_searching"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_searching"
+        android:icon="@mipmap/ic_launcher_round"/>
+
+</menu>
