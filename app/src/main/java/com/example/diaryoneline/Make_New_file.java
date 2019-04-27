@@ -59,9 +59,9 @@ public class Make_New_file extends AppCompatActivity {
             public void onClick(View v){
                 save();
 
-                // back to main
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                // TODO: back to main , not intent, just go back. let googling
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(intent);
             }
         });
 
@@ -108,6 +108,7 @@ public class Make_New_file extends AppCompatActivity {
             return;
         }
         try {
+            // TODO: 파일이 있지만 내용이 없을 대 에러가 나, 하지만 이거는 디버깅용 필요없자나.(보류)
             FileInputStream fis = openFileInput(FILENAME);
             Scanner scanner = new Scanner(fis);
             scanner.useDelimiter("\\Z");
