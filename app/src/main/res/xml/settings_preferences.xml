@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="설정">
+        <ListPreference
+            android:entries="@array/array_Font"
+            android:entryValues="@array/array_Font"
+            android:key="Font_list"
+            android:summary="사용할 폰트를 선택하세요"
+            android:title="폰트" />
+        <ListPreference
+            android:entries="@array/array_Font_size"
+            android:entryValues="@array/array_Font_size"
+            android:key="Font_size_list"
+            android:summary="글자 크기를 선택하세요"
+            android:title="글자 크기"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+
