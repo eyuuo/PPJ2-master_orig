@@ -1,39 +1,74 @@
 package com.example.diaryoneline;
 
+
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
+
+import static com.example.diaryoneline.R.id.OK_button;
+import static com.example.diaryoneline.R.id.btn_debug;
 
 public class Make_New_file extends AppCompatActivity {
 
+
     int mYear, mMonth, mDay;
     TextView mTxtDate;
+
+    // to store
+    EditText edit;
+    TextView text;
+    EditText titlename;
+    String FILENAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make__new_file);
 
-        // back to main menu
-        Button OK = (Button) findViewById(R.id.OK_button);
-        OK.setOnClickListener(new View.OnClickListener(){
+        // to store
+        titlename = (EditText)findViewById(R.id.title);
+        edit = (EditText)findViewById(R.id.input);
+        // debug
+        text = (TextView)findViewById(R.id.for_debug);
+        Button OK = (Button)findViewById(OK_button);
+        Button LOAD = (Button)findViewById(btn_debug);
 
+        OK.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //TODO : 메모리에 저장하는 기능
+                save();
 
                 // back to main
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        LOAD.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                load();
             }
         });
 
@@ -50,6 +85,41 @@ public class Make_New_file extends AppCompatActivity {
         UpdateNow();
 
     }
+
+    private void save(){
+        if(FILENAME.isEmpty()){
+            Toast.makeText(this, "Please enter a filename", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try{
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(edit.getText().toString().getBytes());
+            fos.close();
+        }catch(Exception e){
+            Toast.makeText(this, "Exception writing file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void load(){
+
+        if(FILENAME.isEmpty()) {
+            Toast.makeText(this, "Please enter a filename", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            Scanner scanner = new Scanner(fis);
+            scanner.useDelimiter("\\Z");
+            String content = scanner.next();
+            scanner.close();
+            edit.setText(FILENAME);
+            text.setText(content);
+        }catch(FileNotFoundException e){
+            Toast.makeText(this, "file not found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     public void date_clickOn(View v){
         switch(v.getId()){
@@ -77,6 +147,7 @@ public class Make_New_file extends AppCompatActivity {
 
     void UpdateNow(){
         mTxtDate.setText(String.format("%d.%02d.%02d",mYear, mMonth+1, mDay));
+        FILENAME = String.format("%d.%02d.%02d",mYear, mMonth+1, mDay);
     }
 }
 
