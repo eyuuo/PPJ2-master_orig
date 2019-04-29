@@ -14,6 +14,40 @@
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
 
+    <TextView
+        android:id="@+id/dateNow"
+        android:layout_width="125dp"
+        android:layout_height="55dp"
+        android:gravity="center"
+        android:onClick="onCLickDate"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:visibility="visible"
+        />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:scrollbars="vertical" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/TOP_listview"
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="381dp"
+        android:scrollbars="vertical"
+        android:visibility="invisible">
+    </android.support.v7.widget.RecyclerView>
+
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"
         android:layout_width="wrap_content"
