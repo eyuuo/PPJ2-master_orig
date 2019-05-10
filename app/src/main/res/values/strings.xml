@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name"></string>
     <string name="action_searching"></string>
+    <string name="title_activity_modify">modify</string>
+    <string name="list">list</string>
+    <string name="delete">delete</string>
+    <string name="modify">modify</string>
+
+        <string name="hint">일기를 작성하세요</string>
+        <string name="first">first</string>
+        <string name="second">second</string>
 </resources>

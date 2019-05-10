@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listview.addItemDecoration(decoration);
     }
 
-
+///
     private View.OnClickListener onClickItem = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -158,12 +158,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listview2.addItemDecoration(decoration2);
     }
 
-
+///
     private View.OnClickListener onClickItem2 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             String str = (String) v.getTag();
             Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
+
+            // 수정하기로 떠나는 것
+            Intent intent = new Intent(MainActivity.this, modify.class);
+            startActivity(intent);
+            finish();
         }
     };
 
@@ -177,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 anim();
                 break;
             case R.id.fab1:
-                // TODO: 위에꺼 여기다 정리하기
+                //Intent 는 위에서 실행되도록 함.
                 anim();
                 break;
             case R.id.fab2:

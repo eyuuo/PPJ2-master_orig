@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.diaryoneline.MainActivity">
 
+    <item android:id="@+id/action_settings2"
+        android:title="@string/list"
+        app:showAsAction="always"/>
 
+    <item android:id="@+id/action_settings3"
+        android:title="@string/delete"
+        app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/action_searching"
-        app:showAsAction="ifRoom"
-        android:title="@string/action_searching"
-        android:icon="@mipmap/ic_launcher_round"/>
-
+    <item android:id="@+id/action_settings4"
+        android:title="@string/modify"
+        app:showAsAction="always"/>
 </menu>
