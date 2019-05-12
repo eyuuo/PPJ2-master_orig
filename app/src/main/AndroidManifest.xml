@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Make_New_file"></activity>
+        <activity
+            android:name=".modify"
+            android:label="@string/title_activity_modify"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Make_New_file" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
