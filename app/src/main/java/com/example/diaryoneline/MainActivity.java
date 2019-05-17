@@ -1,5 +1,6 @@
 package com.example.diaryoneline;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +16,17 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
+
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,8 +35,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FloatingActionButton fab, fab1, fab2;
 
     //리사이클러 TOP
-    private RecyclerView listview;
+    private RecyclerView listview;//month list
+    private RecyclerView listview3;//Year list
     private TOPAdapter adapter;
+    private TOPAdapter3 adapter3;
     //리사이클러 리스트
     private RecyclerView listview2;
     private ListAdapter2 adapter2;
@@ -35,9 +46,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //시간 계산1
     long now = System.currentTimeMillis();
     Date date = new Date(now);
-    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy/MM");
+    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy.MM.dd");
     String formatDate = sdfNow.format(date);
-    TextView dateNow;
+    TextView monthNow;
+    TextView yearNow;
     //시간 계산 2
 
     SimpleDateFormat sdfNowYear = new SimpleDateFormat("yyyy");
@@ -50,13 +62,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //현재 시간
-        dateNow = (TextView) findViewById(R.id.dateNow);
-        dateNow.setText(formatDate);
+        //현재 시간 설정
+        yearNow = (TextView) findViewById(R.id.yearNow);
+        yearNow.setText(nowYear);
+        monthNow = (TextView) findViewById(R.id.monthNow);
+        monthNow.setText(nowMoth);
 
         //리사이클러뷰TOP
-        init();
+        init();//Month
+        init3();//Year
         //리사이클러리스트
+
+        listview2 = findViewById(R.id.main_listview);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        listview2.setLayoutManager(layoutManager2);
+
         init2();
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
@@ -77,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(), Make_New_file.class);
                 startActivity(intent);
-                // 12주차 수정 : 선택메뉴 초기화
+                //12주차 주만
                 anim();
             }
         });
@@ -87,93 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
     }
 
-    //---------리사이클러TOP------------------
-
-    private void init() {
-
-        listview = findViewById(R.id.TOP_listview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        listview.setLayoutManager(layoutManager);
-
-        //날짜 계산
-        int year = Integer.parseInt(nowYear);
-        int month = Integer.parseInt(nowMoth);
-
-        int [] Mdate = {31,28,31,30,31,30,31,31,30,31,30,31};
-        //윤년 판단.
-        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
-            Mdate[1] = 29;
-        }
-
-        ArrayList<String> itemList = new ArrayList<>();
-        String A;
-
-        int M = Integer.parseInt(nowMoth);
-
-        for(int i=1;i<=Mdate[M-1];i++)
-        {
-            A= String.valueOf(i);
-            itemList.add(A);
-        }
-
-
-        adapter = new TOPAdapter(this, itemList, onClickItem);
-        listview.setAdapter(adapter);
-
-        MyTOPListDecoration decoration = new MyTOPListDecoration();
-        listview.addItemDecoration(decoration);
-    }
-
-///
-    private View.OnClickListener onClickItem = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String str = (String) v.getTag();
-            Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    //-----------리사이클러 리스트----------------
-
-    private void init2() {
-
-        listview2 = findViewById(R.id.main_listview);
-        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        listview2.setLayoutManager(layoutManager2);
-
-        ArrayList<String> itemList2 = new ArrayList<>();
-        String A;
-        for(int i=0;i<10;i++)
-        {
-            //넣고 싶은 내용.
-            A = String.valueOf(i);
-            itemList2.add(A);
-        }
-
-
-        adapter2 = new ListAdapter2(this, itemList2, onClickItem2);
-        listview2.setAdapter(adapter2);
-
-        MyListDecoration decoration2 = new MyListDecoration();
-        listview2.addItemDecoration(decoration2);
-    }
-
-///
-    private View.OnClickListener onClickItem2 = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String str = (String) v.getTag();
-            Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
-
-            // 수정하기로 떠나는 것
-            Intent intent = new Intent(MainActivity.this, modify.class);
-            startActivity(intent);
-            finish();
-        }
-    };
-
-    //---------------------------
-
+    //버튼 누르면 Intent!! 각 지정된 페이지로 이동한다.
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -189,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 anim();
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
-                //12주차 수정 : 선택 메뉴 초기화
+                // 12주차 수정
                 isFabOpen = true;
                 anim();
                 break;
@@ -197,8 +131,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -240,14 +172,224 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /*이유경 파트 시작 : 사이클 뷰 3개 조작*/
+    //---------리사이클러TOP------------------
 
-    public void onCLickDate(View view) {
-        Toast.makeText(this, "date", Toast.LENGTH_SHORT).show();
-        //리사이클 뷰 보이기 안보이기
-        //listview.setVisibility(View.VISIBLE);
-        if(listview.getVisibility() == View.INVISIBLE)
-            listview.setVisibility(View.VISIBLE);
-        else listview.setVisibility(View.INVISIBLE);
+    private void init() {
+
+        listview = findViewById(R.id.TOP_listview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        listview.setLayoutManager(layoutManager);
+
+
+        //날짜 계산
+        int year = Integer.parseInt(nowYear);
+
+        //month
+        ArrayList<String> itemList = new ArrayList<>();
+        String A;
+        int M = Integer.parseInt(nowMoth);
+        //month
+        for(int i=1;i<=12;i++)
+        {
+            A= String.valueOf(i);
+            itemList.add(A);
+        }
+
+        adapter = new TOPAdapter(this, itemList, onClickItem);
+        listview.setAdapter(adapter);
+        MyTOPListDecoration decoration = new MyTOPListDecoration();
+
+        listview.addItemDecoration(decoration);
 
     }
+
+    private void init3(){
+
+        listview3 = findViewById(R.id.TOP_listview3);
+        LinearLayoutManager layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        listview3.setLayoutManager(layoutManager3);
+        //year
+        ArrayList<String> itemList3 = new ArrayList<>();
+        String A3;
+        int year = Integer.parseInt(nowYear);
+        //year
+        for(int i=2015;i<=year;i++)
+        {
+            A3= String.valueOf(i);
+            itemList3.add(A3);
+        }
+
+        //month
+        adapter3 = new TOPAdapter3(this, itemList3, onClickItem3);
+        listview3.setAdapter(adapter3);
+
+        //month
+        MyTOPListDecoration decoration3 = new MyTOPListDecoration();
+        listview3.addItemDecoration(decoration3);
+
+    }
+
+
+    //-----------리사이클러 리스트----------------
+
+    private void init2() {
+        /*
+        listview2 = findViewById(R.id.main_listview);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        listview2.setLayoutManager(layoutManager2);    */
+
+        ArrayList<String> itemList2 = new ArrayList<>();
+
+        String yearS = (String) yearNow.getText();
+        String monthS = (String) monthNow.getText();
+
+        String str =  yearS+"."+monthS+".";
+        String str2 ;
+        //Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+        String A =" ";
+        String B =" ";
+        String C =" ";
+        //목표 : 파일 제목을 불러와 A에 저장해서 넣기.
+
+        //넣고 싶은 내용.
+        for(int i=16;i<=17;i++) {
+            str2 = str + String.valueOf(i);
+
+            A = fileYN(str2);
+            B = findeFile(str2);
+            C = A+"\n"+B;
+            Toast.makeText(this, B, Toast.LENGTH_SHORT).show();
+            if (A == "-1" || A == "0") {
+            } else {
+                itemList2.add(C);
+
+            }
+        }
+
+        adapter2 = new ListAdapter2(this, itemList2, onClickItem2);
+        listview2.setAdapter(adapter2);
+
+        MyListDecoration decoration2 = new MyListDecoration();
+        listview2.addItemDecoration(decoration2);
+    }
+
+    //중간 리스트 누르면
+    private View.OnClickListener onClickItem2 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String str = (String) v.getTag();
+            Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
+
+            // 수정하기로 떠나는 것
+            Intent intent = new Intent(MainActivity.this, modify.class);
+            startActivity(intent);
+            finish();
+        }
+    };
+
+
+    //-----------위에 날짜 누르면 리스트 뷰 보이기.
+
+    public void onCLickMonth(View view) {
+        //Toast.makeText(this, "date", Toast.LENGTH_SHORT).show();
+
+        //리사이클 뷰 보이기 안보이기
+        //listview.setVisibility(View.VISIBLE);
+        if(listview.getVisibility() == View.INVISIBLE){
+            listview.setVisibility(View.VISIBLE);
+        }
+        else listview.setVisibility(View.INVISIBLE);
+        if(listview3.getVisibility() == View.VISIBLE)
+            listview3.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void onCLickYear(View view) {
+        //Toast.makeText(this, "year", Toast.LENGTH_SHORT).show();
+        //리사이클 뷰 보이기 안보이기
+        //listview3.setVisibility(View.VISIBLE);
+        if(listview3.getVisibility() == View.INVISIBLE){
+            listview3.setVisibility(View.VISIBLE);
+
+        }
+        else {
+            listview3.setVisibility(View.INVISIBLE);
+        }
+        if(listview.getVisibility() == View.VISIBLE)
+            listview.setVisibility(View.INVISIBLE);
+
+    }
+
+    //TOP리스트의 날짜 누르면 보이는 반응
+    ///TOP 리스트를 누륻기!!!! MONTH
+    private View.OnClickListener onClickItem = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String str = (String) v.getTag();
+            if(str.length()==1)
+                monthNow.setText("0"+str);
+            else
+                monthNow.setText(str);
+            init2();
+            // Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
+        }
+    };
+    ///TOP 리스트를 누륻기!!!! YEAR
+    private View.OnClickListener onClickItem3 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String str = (String) v.getTag();
+            yearNow.setText(str);
+            init2();
+            // Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    //------파일이 존재하면 파일 이름 리턴, 없으면 -1리턴
+    public String fileYN(String str){
+
+        //str = "2019.05.16";
+
+        try {
+            FileInputStream fis = openFileInput(str);
+            Scanner scanner = new Scanner(fis);
+            //scanner.useDelimiter("\\Z");
+            // String content = scanner.next();
+            scanner.close();
+            return str;
+            //Toast.makeText(MainActivity.this, content, Toast.LENGTH_SHORT).show();
+        }catch(FileNotFoundException e){
+            //Toast.makeText(this, "file not found", Toast.LENGTH_SHORT).show();
+            return "-1";
+        }
+
+    }
+    public String findeFile(String str){
+
+        String str2;
+        // str = "2019.05.17";
+        try {
+            FileInputStream fis = openFileInput(str);
+            Scanner scanner = new Scanner(fis);
+            scanner.useDelimiter("\\Z");
+            String content = scanner.next();
+            scanner.close();
+            str2 = content.split("\\n")[0];
+
+            //Toast.makeText(this, str2, Toast.LENGTH_SHORT).show();
+            return str2;
+
+        }catch(FileNotFoundException e){
+            return "-1";
+        }
+
+    }
+
+
+    //—————————————
+    /*이유경 파트 끝*/
+
+
+
 }

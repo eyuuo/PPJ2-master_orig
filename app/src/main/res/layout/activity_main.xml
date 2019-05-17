@@ -13,13 +13,14 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-
+    <!--'년도'-->
     <TextView
-        android:id="@+id/dateNow"
-        android:layout_width="125dp"
+        android:id="@+id/yearNow"
+        android:text="2019"
+        android:layout_width="100dp"
         android:layout_height="55dp"
         android:gravity="center"
-        android:onClick="onCLickDate"
+        android:onClick="onCLickYear"
         android:textAllCaps="false"
         android:textColor="#ffffff"
         android:textSize="20sp"
@@ -27,8 +28,38 @@
         android:typeface="normal"
         android:visibility="visible"
         />
+    <!--'|'-->
+    <TextView
+        android:text="|"
+        android:layout_marginLeft="95dp"
+        android:layout_width="15dp"
+        android:layout_height="55dp"
+        android:gravity="center"
 
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:visibility="visible"
+        />
+    <!--'월'-->
+    <TextView
+        android:id="@+id/monthNow"
+        android:layout_width="50dp"
+        android:layout_height="55dp"
+        android:layout_marginLeft="120dp"
+        android:gravity="left|center"
+        android:onClick="onCLickMonth"
+        android:text=""
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="normal"
+        android:visibility="visible" />
 
+    <!--'일기 리스트'-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_listview"
         android:layout_width="match_parent"
@@ -36,6 +67,19 @@
         android:layout_marginTop="60dp"
         android:scrollbars="vertical" />
 
+
+    <!--'날짜 리스트 year편'-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/TOP_listview3"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="381dp"
+        android:scrollbars="vertical"
+        android:visibility="invisible">
+    </android.support.v7.widget.RecyclerView>
+
+    <!--'날짜 리스트 month편'-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/TOP_listview"
         android:layout_width="match_parent"
@@ -79,7 +123,10 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="15sp"
         android:backgroundTint="#9500ff"
-     />
+        />
+
+
+
 
 
 </FrameLayout>
