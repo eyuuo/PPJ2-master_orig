@@ -57,17 +57,24 @@ public class Make_New_file extends AppCompatActivity {
         OK.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                // 12주차 수정 : 파일 이름 = 날짜:타이틀
+//                FILENAME = String.format("%d.%02d.%02d:%s",mYear, mMonth+1, mDay, titlename.getText().toString());
+                // 12주차 수정(2) : 다시 원래대로
+                FILENAME = String.format("%d.%02d.%02d",mYear, mMonth+1, mDay);
                 save();
 
-                // TODO: back to main , not intent, just go back. let googling
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
+                // 12주차 수정 : 뒤로가기 버튼
+                onBackPressed();
+
             }
         });
 
         LOAD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                // 12주차 수정 : 파일 로드
+                FILENAME = String.format("%d.%02d.%02d",mYear, mMonth+1, mDay);
+//                FILENAME = String.format("%d.%02d.%02d:%s",mYear, mMonth+1, mDay, titlename.getText().toString());
                 load();
             }
         });
@@ -94,6 +101,10 @@ public class Make_New_file extends AppCompatActivity {
 
         try{
             FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos.write(titlename.getText().toString().getBytes());
+            //12주차 추가수정
+            String deli = "\n";
+            fos.write(deli.getBytes());
             fos.write(edit.getText().toString().getBytes());
             fos.close();
         }catch(Exception e){
@@ -108,7 +119,7 @@ public class Make_New_file extends AppCompatActivity {
             return;
         }
         try {
-            // TODO: 파일이 있지만 내용이 없을 대 에러가 나, 하지만 이거는 디버깅용 필요없자나.(보류)
+            // TODO: 로드 버튼으로 파일을 부르려면 파일이름을 다 알아야 해... 뭐 어짜피 안쓸기능이긴 해.
             FileInputStream fis = openFileInput(FILENAME);
             Scanner scanner = new Scanner(fis);
             scanner.useDelimiter("\\Z");
@@ -148,6 +159,9 @@ public class Make_New_file extends AppCompatActivity {
 
     void UpdateNow(){
         mTxtDate.setText(String.format("%d.%02d.%02d",mYear, mMonth+1, mDay));
+        // 12주차 수정 : 파일 이름 = 날짜:타이틀
+//        FILENAME = String.format("%d.%02d.%02d:%s",mYear, mMonth+1, mDay, titlename.getText().toString());
+        // 12주차 수정(2) : 다시 원래대로
         FILENAME = String.format("%d.%02d.%02d",mYear, mMonth+1, mDay);
     }
 }

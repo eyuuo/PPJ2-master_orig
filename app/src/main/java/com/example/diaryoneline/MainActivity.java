@@ -72,13 +72,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fab2.setOnClickListener(this);
 
         // make new file
-
-
         fab1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(), Make_New_file.class);
                 startActivity(intent);
+                // 12주차 수정 : 선택메뉴 초기화
+                anim();
             }
         });
 
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i=0;i<10;i++)
         {
             //넣고 싶은 내용.
-            A= String.valueOf(i);
+            A = String.valueOf(i);
             itemList2.add(A);
         }
 
@@ -189,7 +189,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 anim();
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
-                // TODO: 버튼들을 인비저블하게(초기상태로 되돌리기) _ fab1,2 버튼 모두 적용
+                //12주차 수정 : 선택 메뉴 초기화
+                isFabOpen = true;
+                anim();
                 break;
         }
 
