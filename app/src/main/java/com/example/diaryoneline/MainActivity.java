@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //목표 : 파일 제목을 불러와 A에 저장해서 넣기.
 
         //넣고 싶은 내용.
-        for(int i=16;i<=17;i++) {
+        for(int i=1;i<=31;i++) {
             str2 = str + String.valueOf(i);
 
             A = fileYN(str2);
