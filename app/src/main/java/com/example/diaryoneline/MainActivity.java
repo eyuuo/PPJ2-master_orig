@@ -1,6 +1,5 @@
 package com.example.diaryoneline;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,9 +15,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TOPAdapter adapter;
     private TOPAdapter3 adapter3;
     //리사이클러 리스트
+
     private RecyclerView listview2;
     private ListAdapter2 adapter2;
 
@@ -257,9 +255,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             str2 = str + String.valueOf(i);
 
             A = fileYN(str2);
-            B = findeFile(str2);
+            B = findeFileName(str2);
             C = A+"\n"+B;
-            Toast.makeText(this, B, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, B, Toast.LENGTH_SHORT).show();
             if (A == "-1" || A == "0") {
             } else {
                 itemList2.add(C);
@@ -279,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onClick(View v) {
             String str = (String) v.getTag();
-            Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, str, Toast.LENGTH_SHORT).show();
 
             // 수정하기로 떠나는 것
             Intent intent = new Intent(MainActivity.this, modify.class);
@@ -365,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-    public String findeFile(String str){
+    public String findeFileName(String str){
 
         String str2;
         // str = "2019.05.17";
@@ -376,6 +374,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String content = scanner.next();
             scanner.close();
             str2 = content.split("\\n")[0];
+
+            //Toast.makeText(this, str2, Toast.LENGTH_SHORT).show();
+            return str2;
+
+        }catch(FileNotFoundException e){
+            return "-1";
+        }
+
+    }
+
+    //파일 이름을 넣으면 파일 내용 String을 리턴하는 함수!!
+    public String findeFileContent(String str){
+
+        String str2;
+        // str = "2019.05.17";
+        try {
+            FileInputStream fis = openFileInput(str);
+            Scanner scanner = new Scanner(fis);
+            scanner.useDelimiter("\\Z");
+            String content = scanner.next();
+            scanner.close();
+            str2 = content.split("\\n")[1];
 
             //Toast.makeText(this, str2, Toast.LENGTH_SHORT).show();
             return str2;
