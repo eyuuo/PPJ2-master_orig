@@ -1,6 +1,7 @@
 package com.example.diaryoneline;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,16 +36,19 @@ public class Make_New_file extends AppCompatActivity {
     int mYear, mMonth, mDay;
     TextView mTxtDate;
 
+
     // to store
     EditText edit;
     TextView text;
     EditText titlename;
     String FILENAME;
-
+    String INIT2="True";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make__new_file);
+
+
 
         // to store
         titlename = (EditText)findViewById(R.id.title);
@@ -54,15 +58,21 @@ public class Make_New_file extends AppCompatActivity {
         Button OK = (Button)findViewById(OK_button);
         Button LOAD = (Button)findViewById(btn_debug);
 
+        //activity 종료시키기 //13
+        MainActivity MmainActivity = (MainActivity)MainActivity.mainActivity;
+        MmainActivity.finish();
+
         OK.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 // 12주차 수정 : 파일 이름 = 날짜:타이틀
-//                FILENAME = String.format("%d.%02d.%02d:%s",mYear, mMonth+1, mDay, titlename.getText().toString());
+//               FILENAME = String.format("%d.%02d.%02d:%s",mYear, mMonth+1, mDay, titlename.getText().toString());
                 // 12주차 수정(2) : 다시 원래대로
                 FILENAME = String.format("%d.%02d.%02d",mYear, mMonth+1, mDay);
                 save();
-
+                Intent intent = new Intent(Make_New_file.this , MainActivity.class);
+                intent.putExtra( "init2", INIT2);
+                startActivity(intent);
                 // 12주차 수정 : 뒤로가기 버튼
                 onBackPressed();
 

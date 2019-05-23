@@ -1,5 +1,6 @@
 package com.example.diaryoneline;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +27,10 @@ import java.util.Scanner;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    //Mainactivity 종료시키기 //13
+    public static Activity mainActivity;
+
 
     private Animation fab_open, fab_close;
     private Boolean isFabOpen = false;
@@ -60,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Mainactivity 종료시키기 //13
+        mainActivity = MainActivity.this;
+
+
+
         //현재 시간 설정
         yearNow = (TextView) findViewById(R.id.yearNow);
         yearNow.setText(nowYear);
@@ -69,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //리사이클러뷰TOP
         init();//Month
         init3();//Year
-        //리사이클러리스트
 
+        //리사이클러리스트
         listview2 = findViewById(R.id.main_listview);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         listview2.setLayoutManager(layoutManager2);
@@ -97,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 //12주차 주만
                 anim();
+
             }
         });
 
@@ -413,3 +424,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 }
+
+/*
+   //main에서
+  public static Activity mainActivity; //Main 전역에
+   mainActivity = MainActivity.this; //Main onclick
+   //이동한 곳에서.
+   //Main activity 종료시키기 //13
+   MainActivity MmainActivity = (MainActivity)MainActivity.mainActivity;
+   MmainActivity.finish();
+
+   //Make_New_file.java
+   //Make_New_file 종료시키기 //13
+  public static Activity make_new_file;
+   //Make_New_file 종료시키기 //13
+   make_new_file = Make_New_file.this;
+
+   //이동한 곳에서.
+   //Make_New_file 종료시키기 //13
+   Make_New_file Mmake_new_file = (Make_New_file)Make_New_file.make_new_file;
+   Mmake_new_file.finish();
+*/
